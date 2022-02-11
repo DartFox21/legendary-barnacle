@@ -8,6 +8,7 @@ import 'package:godartadmin/services/fb_services.dart';
 import 'package:godartadmin/widgets/drop_down.dart';
 import 'package:godartadmin/widgets/tables/table_head_txt.dart';
 import 'package:godartadmin/widgets/texts/custom_text.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'merchant_dialog.dart';
 
@@ -161,10 +162,10 @@ class _MerchantTableState extends State<MerchantTable> {
                           label: TableHeader(title: 'Account Status'),
                         ),
                         DataColumn(
-                          label: TableHeader(title: 'Top Picked'),
+                          label: TableHeader(title: 'Email'),
                         ),
                         DataColumn(
-                          label: TableHeader(title: 'Ratings'),
+                          label: TableHeader(title: 'Mobile'),
                         ),
                         DataColumn(
                           label: TableHeader(title: 'Actions'),
@@ -186,7 +187,7 @@ class _MerchantTableState extends State<MerchantTable> {
       return DataRow(cells: [
         DataCell(
           Text(
-            document.get('shopName'),
+            document.get('shopName') ?? '--',
           ),
         ),
         DataCell(document.get('verified')
@@ -198,24 +199,41 @@ class _MerchantTableState extends State<MerchantTable> {
                 'Pending',
                 style: TextStyle(color: Colors.red),
               )),
-        DataCell(document.get('isTopPicked')
-            ? const Text(
-                'Yes',
-                style: TextStyle(color: Colors.green),
-              )
-            : const Text(
-                'No',
-                style: TextStyle(color: Colors.red),
-              )),
+        DataCell(Text(document.get('email') ?? '--')
+            // ? const Text(
+            //     'Yes',
+            //     style: TextStyle(color: Colors.green),
+            //   )
+            // : const Text(
+            //     'No',
+            //     style: TextStyle(color: Colors.red),
+            //   )
+
+            ),
+        // DataCell(
+        //   Row(
+        //     children: [
+        //       const Icon(
+        //         Icons.star,
+        //         color: Colors.yellow,
+        //       ),
+        //       Text(
+        //         document.get('rating').toString(),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         DataCell(
           Row(
             children: [
               const Icon(
-                Icons.star,
-                color: Colors.yellow,
+                // Icons.star,
+                // color: Colors.yellow,
+                Iconsax.mobile,
               ),
               Text(
-                document.get('rating').toString(),
+                // document.get('rating').toString(),
+                document.get('mobile').toString(),
               ),
             ],
           ),
@@ -256,17 +274,41 @@ Widget popMenu({
       onSelected: (value) async {
         switch (value) {
           case 'Activate':
-            await services.updateVendorStatus(
-                type: 'verified', id: id, currStatus: activationStatus);
+            if (doc.get('shopName') == null ||
+                doc.get('contents') == null ||
+                doc.get('imageUrl') == null ||
+                doc.get('address') == null) {
+              EasyLoading.showInfo(
+                  'Vendor does not have necessary documents to proceed');
+            } else {
+              await services.updateVendorStatus(
+                  type: 'verified', id: id, currStatus: activationStatus);
+            }
             break;
 
           case 'Deactivate':
-            await services.updateVendorStatus(
-                type: 'deactivated', id: id, currStatus: deactivationStatus);
+            if (doc.get('shopName') == null ||
+                doc.get('contents') == null ||
+                doc.get('imageUrl') == null ||
+                doc.get('address') == null) {
+              EasyLoading.showInfo(
+                  'Vendor does not have necessary documents to proceed');
+            } else {
+              await services.updateVendorStatus(
+                  type: 'deactivated', id: id, currStatus: deactivationStatus);
+            }
             break;
           case 'TopPicked':
-            await services.updateVendorStatus(
-                type: 'isTopPicked', id: id, currStatus: isTopPicked);
+            if (doc.get('shopName') == null ||
+                doc.get('contents') == null ||
+                doc.get('imageUrl') == null ||
+                doc.get('address') == null) {
+              EasyLoading.showInfo(
+                  'Vendor does not have necessary documents to proceed');
+            } else {
+              await services.updateVendorStatus(
+                  type: 'isTopPicked', id: id, currStatus: isTopPicked);
+            }
             break;
           case 'Details':
             if (doc.get('shopName') == null ||

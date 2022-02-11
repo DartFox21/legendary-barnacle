@@ -15,11 +15,11 @@ class CategoryCard extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(4),
       onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return SubCategoryWidget(categoryName: document['name']);
-            });
+        // showDialog(
+        //     context: context,
+        //     builder: (BuildContext context) {
+        //       return SubCategoryWidget(categoryName: document['name']);
+        //     });
       },
       child: SizedBox(
         height: 120,

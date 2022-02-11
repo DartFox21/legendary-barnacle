@@ -20,6 +20,9 @@ class FirebaseServices {
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
 
+  CollectionReference working =
+      FirebaseFirestore.instance.collection('workingDrivers');
+
   final FirebaseFirestore _fb = FirebaseFirestore.instance;
   Future<DocumentSnapshot> getAdminCred(String id) {
     // id in collection is equal distinct username
@@ -190,5 +193,11 @@ class FirebaseServices {
     } catch (e) {
       throw Exception('Something went wrong');
     }
+  }
+
+  Future<DocumentSnapshot> driverStatus({
+    required String id,
+  }) async {
+    return await working.doc(id).get();
   }
 }

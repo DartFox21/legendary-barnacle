@@ -71,56 +71,62 @@ class _SupportDialogState extends State<SupportDialog> {
                       decoration: BoxDecoration(
                         color: Colors.grey.shade100,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 20),
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(
-                                snapshot.data!.get('customerPhoto')),
-                            radius: 30,
-                          ),
-                          Text(snapshot.data!.get('username'),
-                              style: photoTitle),
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      child: Center(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Icon(Iconsax.sms_edit),
-                              const SizedBox(
-                                width: 10.0,
+                              const SizedBox(height: 20),
+                              CircleAvatar(
+                                backgroundColor: Colors.grey,
+                                backgroundImage: NetworkImage(
+                                    snapshot.data!.get('customerPhoto')),
+                                radius: 30,
                               ),
-                              Text(widget.data['userEmail'].toString(),
-                                  style: photoTitle.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  )),
+                              Text(snapshot.data!.get('username'),
+                                  style: photoTitle),
+                              const SizedBox(height: 40),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Iconsax.sms_edit),
+                                  const SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(widget.data['userEmail'].toString(),
+                                      style: photoTitle.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                ],
+                              ),
+                              item(
+                                  title: 'Order ID: ',
+                                  desc: widget.data['orderId'].toString()),
+                              snapshot.data!.get('type') == 'vendor'
+                                  ? item(
+                                      title: 'Vendor: ',
+                                      desc: snapshot.data!
+                                              .get('seller')['shopName'] ??
+                                          '-')
+                                  : item(
+                                      title: 'Pickup: ',
+                                      desc: snapshot.data!
+                                              .get('pickup')['pickupAddress'] ??
+                                          '-'),
+                              item(
+                                  title: 'Darter: ',
+                                  desc: snapshot.data!.get('driver')['name'] ??
+                                      '-'),
+                              item(
+                                  title: 'Drop-off: ',
+                                  desc: snapshot.data!
+                                          .get('destinationAddress') ??
+                                      '-'),
                             ],
                           ),
-                          item(
-                              title: 'Order ID: ',
-                              desc: widget.data['orderId'].toString()),
-                          snapshot.data!.get('type') == 'vendor'
-                              ? item(
-                                  title: 'Vendor: ',
-                                  desc: snapshot.data!
-                                          .get('seller')['shopName'] ??
-                                      '-')
-                              : item(
-                                  title: 'Pickup: ',
-                                  desc: snapshot.data!
-                                          .get('pickup')['pickupName'] ??
-                                      '-'),
-                          item(
-                              title: 'Darter: ',
-                              desc:
-                                  snapshot.data!.get('driver')['name'] ?? '-'),
-                          item(
-                              title: 'Drop-off: ',
-                              desc:
-                                  snapshot.data!.get('destinationName') ?? '-'),
-                        ],
+                        ),
                       ),
                     ),
                   ),

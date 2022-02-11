@@ -25,6 +25,7 @@ class _LargeCardsState extends State<LargeCards> {
   int refunds = 0;
   int pendingRiders = 0;
   int pendingMerchants = 0;
+  int activeRiders = 0;
 
   Future<void> ridersPending() async {
     await fbService.drivers
@@ -74,6 +75,14 @@ class _LargeCardsState extends State<LargeCards> {
     await fbService.customers.snapshots().forEach((element) {
       setState(() {
         totalCustomers = element.size;
+      });
+    });
+  }
+
+  Future<void> activeDarters() async {
+    await fbService.working.snapshots().forEach((element) {
+      setState(() {
+        activeRiders = element.size;
       });
     });
   }
@@ -143,6 +152,7 @@ class _LargeCardsState extends State<LargeCards> {
     refundedOrders();
     vendorsPending();
     ridersPending();
+    activeDarters();
   }
 
   @override
@@ -165,6 +175,10 @@ class _LargeCardsState extends State<LargeCards> {
           title: 'Deliveries Completed',
           value: completed.toString(),
           topColor: Colors.lightGreen,
+        ),
+        InfoCard(
+          title: 'Riders Online',
+          value: activeRiders.toString(),
         ),
         InfoCard(
           title: 'Cancelled Deliveries',

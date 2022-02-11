@@ -1,10 +1,15 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase/firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:godartadmin/const/colors.dart';
 import 'package:godartadmin/const/styles.dart';
 
 import 'package:godartadmin/services/fb_services.dart';
+import 'package:godartadmin/services/order_services.dart';
+import 'package:godartadmin/widgets/buttons/login_btn.dart';
 import 'package:godartadmin/widgets/cards/doc_cards.dart';
 import 'package:godartadmin/widgets/cards/photo_card.dart';
+import 'package:godartadmin/widgets/texts/custom_text.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DriverDialog extends StatelessWidget {
@@ -38,15 +43,40 @@ class DriverDialog extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(children: [
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green.withAlpha(55),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(6.0),
-                          child: Text('Active'),
-                        )),
+                    FutureBuilder(
+                        future: _services.working.doc(id).get(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text('Something went wrong'),
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          return CustomButton(
+                              btnColor:
+                                  OrderServices.dbkgStatusColor(snapshot.data),
+                              child: CustomText(
+                                text: OrderServices.driverStatusDesc(
+                                    snapshot.data),
+                                color: OrderServices.driverStatusColor(
+                                    snapshot.data),
+                              ),
+                              onPressed: () {});
+                        }),
+                    // Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.green.withAlpha(55),
+                    //       borderRadius: BorderRadius.circular(4),
+                    //     ),
+                    //     child: const Padding(
+                    //       padding: EdgeInsets.all(6.0),
+                    //       child: Text('Active'),
+                    //     )),
                     const Spacer(),
                     const Icon(Iconsax.candle),
                   ]),
@@ -54,7 +84,7 @@ class DriverDialog extends StatelessWidget {
                     height: 90,
                     width: 90,
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: ClipRRect(

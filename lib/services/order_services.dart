@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:godartadmin/const/colors.dart';
 
@@ -39,5 +40,52 @@ class OrderServices {
       return 'Completed';
     }
     return 'Ongoing';
+  }
+
+  static Color driverStatusColor(document) {
+    late Color col;
+    if (document.exists) {
+      if (document.get('active') == true) {
+        col = ongoingColor;
+      } else if (document.get('active') == false) {
+        col = greenColor;
+      }
+    } else {
+      col = redColor;
+    }
+
+    return col;
+  }
+
+  static String driverStatusDesc(document) {
+    late String desc;
+    if (document.exists) {
+      if (document.get('active') == true) {
+        desc = 'Busy';
+      }
+
+      if (document.get('active') == false) {
+        desc = 'Available';
+      }
+    } else {
+      desc = 'Offline';
+    }
+
+    return desc;
+  }
+
+  static Color dbkgStatusColor(document) {
+    late Color col;
+    if (document.exists) {
+      if (document.get('active') == true) {
+        col = ongoingAlpha;
+      } else if (document.get('active') == false) {
+        col = greenAlpha;
+      }
+    } else {
+      col = redAlpha;
+    }
+
+    return col;
   }
 }

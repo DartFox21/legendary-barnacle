@@ -27,7 +27,7 @@ class PhotoCard extends StatelessWidget {
             height: 150,
             width: 400,
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: Colors.grey.shade100,
               borderRadius: BorderRadius.circular(10),
             ),
             child: ClipRRect(

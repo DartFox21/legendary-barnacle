@@ -19,7 +19,7 @@ class _MerchantTableViewState extends State<MerchantTableView>
     'Pending',
     'Top Picked',
     'Top Rated',
-    'Big Earners',
+    // 'Big Earners',
     'Low rated',
   ];
 

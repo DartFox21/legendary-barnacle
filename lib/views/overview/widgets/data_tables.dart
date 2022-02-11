@@ -101,11 +101,11 @@ List<DataRow> _driverDetailRows(
     return DataRow(cells: [
       DataCell(
         Text(
-          document.get('username'),
+          document.get('username') ?? '--',
         ),
       ),
       DataCell(Text(
-        document.get('orderId'),
+        document.get('orderId') ?? '--',
       )),
       DataCell(
         Row(

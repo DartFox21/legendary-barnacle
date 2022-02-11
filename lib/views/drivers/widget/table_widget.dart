@@ -8,6 +8,7 @@ import 'package:godartadmin/services/fb_services.dart';
 import 'package:godartadmin/widgets/drop_down.dart';
 import 'package:godartadmin/widgets/tables/table_head_txt.dart';
 import 'package:godartadmin/widgets/texts/custom_text.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'driver_dialog.dart';
 
@@ -173,7 +174,8 @@ class _DriverTableState extends State<DriverTable> {
                           label: TableHeader(title: 'Activation Status'),
                         ),
                         DataColumn(
-                          label: TableHeader(title: 'Rating'),
+                          // label: TableHeader(title: 'Rating'),
+                          label: TableHeader(title: 'Mobile'),
                         ),
                         DataColumn2(
                           label: TableHeader(title: 'Email'),
@@ -204,7 +206,9 @@ List<DataRow> _driverDetailRows(
     return DataRow(cells: [
       DataCell(
         Text(
-          document.get('firstname') + ' ' + document.get('lastname'),
+          document.get('firstname') ??
+              '-' + ' ' + document.get('lastname') ??
+              '-',
         ),
       ),
       DataCell(document.get('verified')
@@ -220,11 +224,13 @@ List<DataRow> _driverDetailRows(
         Row(
           children: [
             const Icon(
-              Icons.star,
-              color: Colors.yellow,
+              // Icons.star,
+              // color: Colors.yellow,
+              Iconsax.mobile,
             ),
             Text(
-              document.get('rating').toString(),
+              // document.get('rating').toString(),
+              document.get('mobile').toString(),
             ),
           ],
         ),
@@ -265,13 +271,27 @@ Widget popMenu({
       onSelected: (value) async {
         switch (value) {
           case 'Activate':
-            await services.updateDriverStatus(
-                type: 'verified', id: id, currStatus: activationStatus);
+            if (doc.get('firstname') == null ||
+                doc.get('vehicleBrand') == null ||
+                doc.get('licensePhoto') == null) {
+              EasyLoading.showInfo(
+                  'Rider does not have necessary documents to proceed');
+            } else {
+              await services.updateDriverStatus(
+                  type: 'verified', id: id, currStatus: activationStatus);
+            }
             break;
 
           case 'Deactivate':
-            await services.updateDriverStatus(
-                type: 'deactivated', id: id, currStatus: deactivationStatus);
+            if (doc.get('firstname') == null ||
+                doc.get('vehicleBrand') == null ||
+                doc.get('licensePhoto') == null) {
+              EasyLoading.showInfo(
+                  'Rider does not have necessary documents to proceed');
+            } else {
+              await services.updateDriverStatus(
+                  type: 'deactivated', id: id, currStatus: deactivationStatus);
+            }
             break;
           case 'Details':
             //

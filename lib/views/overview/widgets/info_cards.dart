@@ -39,7 +39,7 @@ class InfoCard extends StatelessWidget {
               style: TextStyle(
                   fontSize: 16, color: isActive ? active : lightGrey)),
           Text(value,
-              style: TextStyle(fontSize: 40, color: isActive ? active : dark)),
+              style: TextStyle(fontSize: 25, color: isActive ? active : dark)),
         ],
       ),
     );

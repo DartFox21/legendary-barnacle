@@ -31,7 +31,7 @@ class _DriverTableViewState extends State<DriverTableView>
     'Pending',
     'deactivated',
     'Top Rated',
-    'Big Earners',
+    // 'Big Earners',
     'Low rated',
   ];
 

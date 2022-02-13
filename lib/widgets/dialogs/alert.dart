@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:godartadmin/const/colors.dart';
 import 'package:godartadmin/widgets/buttons/login_btn.dart';
 
 Future<void> showMyDialog(
-    String title, String desc, BuildContext context) async {
+    {required String title,
+    required String desc,
+    required VoidCallback func,
+    required BuildContext context}) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!
@@ -33,11 +37,33 @@ Future<void> showMyDialog(
           ),
         ),
         actions: <Widget>[
-          Center(
-            child: CustomButton(
-              onPressed: () => Navigator.of(context).pop(),
-              btnColor: Colors.transparent,
-              child: const Text('Okay'),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                    btnColor: Colors.transparent,
+                  ),
+                ),
+                Expanded(
+                  child: CustomButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      func();
+                    },
+                    btnColor: redAlpha,
+                    child: Text('Yes',
+                        style: TextStyle(color: redColor, fontSize: 16)),
+                  ),
+                ),
+              ],
             ),
           )
         ],

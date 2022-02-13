@@ -1,24 +1,37 @@
 import 'dart:core';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:godartadmin/services/api.dart';
 import 'package:godartadmin/services/fb_services.dart';
+import 'package:godartadmin/services/order_services.dart';
 
 class SupportVM with ChangeNotifier {
   final FirebaseServices _services = FirebaseServices();
 
+  final OrderServices _order = OrderServices();
+
   final Api _api = Api();
+
+  Future<void> checkLocation(DocumentSnapshot document) async {
+    if (OrderServices.statusText(document) == 'Arrived Pickup') {
+      await _order.arrivedAtPickUp(document);
+    } else if (OrderServices.statusText(document) == 'Arrived Destination') {
+      await _order.arrivedDestination(document);
+    } else if (OrderServices.statusText(document) == 'Confirm Pickup') {
+      await _order.confirmPickUp(document);
+    } else if (OrderServices.statusText(document) == 'Complete Delivery') {
+      await _order.confirmDelivery(document);
+    }
+  }
+
   Future<void> initiateRefund({
     required String referenceId,
     required String orderId,
     required String cancelType,
   }) async {
     try {
-      EasyLoading.instance
-        ..indicatorType = EasyLoadingIndicatorType.ring
-        ..userInteractions = false
-        ..dismissOnTap = false;
       EasyLoading.show(
         status: 'Canceling order..',
       );

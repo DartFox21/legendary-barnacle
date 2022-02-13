@@ -32,6 +32,7 @@ class NavbarDesktop extends StatelessWidget {
                   child: SizedBox(
                     height: 40,
                     child: CustomButton(
+                      normal: false,
                       btnColor: Colors.redAccent.withAlpha(60),
                       onPressed: () async {
                         await context.read<LoginVM>().logOut();

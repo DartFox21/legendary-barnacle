@@ -23,8 +23,12 @@ class Api {
       Map bank = jsonDecode(access.body);
       if (access.statusCode == 200) {
         Map banks = jsonDecode(access.body);
-
-        value = banks['status'];
+        print(bank);
+        if (banks['status'] == true ||
+            banks['response']['body']['message'] ==
+                'Transaction has been fully reversed') {
+          value = true;
+        }
       } else {
         value = false;
         print(bank);

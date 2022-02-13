@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:godartadmin/const/colors.dart';
 import 'package:godartadmin/services/fb_services.dart';
+import 'package:godartadmin/widgets/dialogs/alert.dart';
 import 'package:godartadmin/widgets/drop_down.dart';
 import 'package:godartadmin/widgets/tables/table_head_txt.dart';
 import 'package:godartadmin/widgets/texts/custom_text.dart';
@@ -277,8 +278,14 @@ Widget popMenu({
               EasyLoading.showInfo(
                   'Rider does not have necessary documents to proceed');
             } else {
-              await services.updateDriverStatus(
-                  type: 'verified', id: id, currStatus: activationStatus);
+              showMyDialog(
+                  context: context,
+                  desc: 'Are you sure you want to proceed?',
+                  title: 'Confirm',
+                  func: () async {
+                    await services.updateDriverStatus(
+                        type: 'verified', id: id, currStatus: activationStatus);
+                  });
             }
             break;
 
@@ -289,8 +296,16 @@ Widget popMenu({
               EasyLoading.showInfo(
                   'Rider does not have necessary documents to proceed');
             } else {
-              await services.updateDriverStatus(
-                  type: 'deactivated', id: id, currStatus: deactivationStatus);
+              showMyDialog(
+                  context: context,
+                  desc: 'Are you sure you want to proceed?',
+                  title: 'Confirm',
+                  func: () async {
+                    await services.updateDriverStatus(
+                        type: 'deactivated',
+                        id: id,
+                        currStatus: deactivationStatus);
+                  });
             }
             break;
           case 'Details':

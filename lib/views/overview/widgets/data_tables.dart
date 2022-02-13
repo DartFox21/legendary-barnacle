@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:godartadmin/const/colors.dart';
 
 import 'package:godartadmin/services/fb_services.dart';
@@ -54,6 +55,7 @@ class _RecentOrdersTableState extends State<RecentOrdersTable> {
           StreamBuilder<QuerySnapshot>(
               stream: _services.orders
                   .where('refunded', isEqualTo: false)
+                  .orderBy('timestamp', descending: true)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -120,16 +122,41 @@ List<DataRow> _driverDetailRows(
       DataCell(Row(children: [
         CustomButton(
             btnColor: lightGrey.withAlpha(20),
-            onPressed: () async {
-              await context.read<SupportVM>().initiateRefund(
-                  referenceId: document.get('reference'),
-                  orderId: document.get('orderId'),
-                  cancelType: 'GoDart');
-            },
+            normal: false,
+            onPressed: (document.get('orderStatus') != 'Completed')
+                ? () async {
+                    await context.read<SupportVM>().initiateRefund(
+                        referenceId: document.get('reference'),
+                        orderId: document.get('orderId'),
+                        cancelType: 'GoDart');
+                  }
+                : () {
+                    EasyLoading.showInfo(
+                        'This order has been completed, please see Manager.',
+                        duration: const Duration(seconds: 3));
+                  },
             child: Text(
               'Refund',
               style: TextStyle(color: lightGrey),
             )),
+        const SizedBox(
+          width: 30,
+        ),
+        Visibility(
+          visible: OrderServices.statusText(document) != 'none',
+          child: CustomButton(
+              btnColor: greenAlpha,
+              normal: false,
+              onPressed: () async {
+                await context.read<SupportVM>().checkLocation(
+                      document,
+                    );
+              },
+              child: Text(
+                OrderServices.statusText(document),
+                style: TextStyle(color: greenColor),
+              )),
+        ),
       ])),
     ]);
   }).toList();

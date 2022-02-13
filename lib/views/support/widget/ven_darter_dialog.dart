@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:godartadmin/const/colors.dart';
 import 'package:godartadmin/const/styles.dart';
+import 'package:godartadmin/widgets/dialogs/alert.dart';
 import 'package:iconsax/iconsax.dart';
 
 class VendorDarterDialog extends StatefulWidget {
@@ -98,11 +99,18 @@ class _VendorDarterDialogState extends State<VendorDarterDialog> {
                             Expanded(
                                 child: InkWell(
                               onTap: () {
-                                if (!widget.data['seen'])
-                                  // ignore: curly_braces_in_flow_control_structures
-                                  widget.data.reference
-                                      .update({'seen': true}).whenComplete(
-                                          () => Navigator.of(context).pop());
+                                if (!widget.data['seen']) {
+                                  showMyDialog(
+                                      context: context,
+                                      desc: 'Are you sure you want to proceed?',
+                                      title: 'Confirm',
+                                      func: () {
+                                        widget.data.reference.update({
+                                          'seen': true
+                                        }).whenComplete(
+                                            () => Navigator.of(context).pop());
+                                      });
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(

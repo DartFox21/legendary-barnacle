@@ -28,7 +28,7 @@ class _RevenueDataState extends State<RevenueData> {
             TextSpan(
                 text: '\₦${formatMoney.format(widget.amount)}',
                 style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           ])),
     );
   }

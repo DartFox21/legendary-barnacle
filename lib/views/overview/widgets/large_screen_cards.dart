@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:godartadmin/models/order_status.dart';
 import 'package:godartadmin/services/fb_services.dart';
 
 import 'info_cards.dart';
+import 'online_drivers/driver_table.dart';
 
 class LargeCards extends StatefulWidget {
   const LargeCards({Key? key}) : super(key: key);
@@ -113,9 +115,8 @@ class _LargeCardsState extends State<LargeCards> {
 
   Future<void> activeOrders() async {
     await orders
-        .where('orderStatus', isNotEqualTo: 'Completed')
-        .where('orderStatus', isNotEqualTo: 'Rejected')
-        .where('orderStatus', isNotEqualTo: 'Canceled')
+        .where('driver.status', isNotEqualTo: OrderStatus.orderComplete)
+        .where('refunded', isEqualTo: false)
         .snapshots()
         .forEach((element) {
       setState(() {
@@ -176,9 +177,18 @@ class _LargeCardsState extends State<LargeCards> {
           value: completed.toString(),
           topColor: Colors.lightGreen,
         ),
-        InfoCard(
-          title: 'Riders Online',
-          value: activeRiders.toString(),
+        InkWell(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const DriverOnlineTable();
+                });
+          },
+          child: InfoCard(
+            title: 'Riders Online',
+            value: activeRiders.toString(),
+          ),
         ),
         InfoCard(
           title: 'Cancelled Deliveries',

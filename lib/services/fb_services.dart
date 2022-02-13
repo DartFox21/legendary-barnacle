@@ -195,9 +195,29 @@ class FirebaseServices {
     }
   }
 
+  Future<void> updateUserData(
+      String collection, String id, Map<String, dynamic> values) async {
+    await _fb.collection(collection).doc(id).get().then((data) {
+      if (data.exists) {
+        data.reference.update(values);
+      }
+    });
+  }
+
   Future<DocumentSnapshot> driverStatus({
     required String id,
   }) async {
     return await working.doc(id).get();
+  }
+
+  Future<void> addTotalRidesType(
+      {required String id, required String item}) async {
+    await drivers.doc(id).get().then((data) {
+      if (data.exists) {
+        var totRides = data.get(item);
+        totRides++;
+        data.reference.update({item: totRides});
+      }
+    });
   }
 }

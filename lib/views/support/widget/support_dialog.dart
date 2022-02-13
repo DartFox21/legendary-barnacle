@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:godartadmin/const/colors.dart';
 import 'package:godartadmin/const/styles.dart';
 import 'package:godartadmin/view_models/support_model.dart';
+import 'package:godartadmin/widgets/dialogs/alert.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/src/provider.dart';
 
@@ -166,11 +168,18 @@ class _SupportDialogState extends State<SupportDialog> {
                             Expanded(
                                 child: InkWell(
                               onTap: () {
-                                if (!widget.data['seen'])
-                                  // ignore: curly_braces_in_flow_control_structures
-                                  widget.data.reference
-                                      .update({'seen': true}).whenComplete(
-                                          () => Navigator.of(context).pop());
+                                if (!widget.data['seen']) {
+                                  showMyDialog(
+                                      context: context,
+                                      desc: 'Are you sure you want to proceed?',
+                                      title: 'Confirm',
+                                      func: () {
+                                        widget.data.reference.update({
+                                          'seen': true
+                                        }).whenComplete(
+                                            () => Navigator.of(context).pop());
+                                      });
+                                }
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -203,14 +212,29 @@ class _SupportDialogState extends State<SupportDialog> {
                                 child: InkWell(
                               onTap: () async {
                                 if (!snapshot.data!.get('refunded')) {
-                                  await context
-                                      .read<SupportVM>()
-                                      .initiateRefund(
-                                          referenceId:
-                                              snapshot.data!.get('reference'),
-                                          orderId: widget.data['orderId'],
-                                          cancelType:
-                                              widget.data['complainer']);
+                                  showMyDialog(
+                                      context: context,
+                                      desc: 'Are you sure you want to proceed?',
+                                      title: 'Confirm',
+                                      func: () async {
+                                        if (snapshot.data!.get('orderStatus') !=
+                                            'Completed') {
+                                          await context
+                                              .read<SupportVM>()
+                                              .initiateRefund(
+                                                  referenceId: snapshot.data!
+                                                      .get('reference'),
+                                                  orderId:
+                                                      widget.data['orderId'],
+                                                  cancelType: widget
+                                                      .data['complainer']);
+                                        } else {
+                                          EasyLoading.showInfo(
+                                              'This order has been completed, please see Manager.',
+                                              duration:
+                                                  const Duration(seconds: 3));
+                                        }
+                                      });
                                 }
                               },
                               child: Container(

@@ -14,7 +14,19 @@ void main() async {
   // await dotenv.load(fileName: '.env');
   setupLocator();
   setPathUrlStrategy();
+  configLoading();
   runApp(MultiProvider(providers: initProviders, child: const MyApp()));
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(seconds: 2)
+    ..indicatorType = EasyLoadingIndicatorType.ring
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 20.0
+    ..radius = 10
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 
 class MyApp extends StatelessWidget {
